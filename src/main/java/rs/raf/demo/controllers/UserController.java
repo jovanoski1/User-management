@@ -34,13 +34,7 @@ public class UserController {
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public User me() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.userService.findByUsername(username);
-    }
-
-    @PostMapping(value = "/hire", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User hire(@RequestParam("salary") Integer salary) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return this.userService.hire(username, salary);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return this.userService.findByEmail(email);
     }
 }

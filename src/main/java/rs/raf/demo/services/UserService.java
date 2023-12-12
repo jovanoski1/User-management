@@ -39,13 +39,13 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User myUser = this.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User myUser = this.findByEmail(email);
         if(myUser == null) {
-            throw new UsernameNotFoundException("User name "+username+" not found");
+            throw new UsernameNotFoundException("Email "+email+" not found");
         }
 
-        return new org.springframework.security.core.userdetails.User(myUser.getUsername(), myUser.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), new ArrayList<>());
     }
 
     public User create(User user) {
@@ -57,25 +57,10 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findAll(PageRequest.of(page, size, Sort.by("salary").descending()));
     }
 
-    public User findByUsername(String username) {
-        return this.userRepository.findByUsername(username);
+    public User findByEmail(String email) {
+        return this.userRepository.findUserByEmail(email);
     }
 
-    public void loggedIn(String username) {
-        User user = this.userRepository.findByUsername(username);
-        Integer loginCount = user.getLoginCount();
-        try {
-            Thread.sleep(10000);
-
-            user.setLoginCount(loginCount + 1);
-            this.userRepository.save(user);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ObjectOptimisticLockingFailureException exception) {
-            this.loggedIn(username);
-        }
-    }
 
 //    @Scheduled(fixedDelay = 1000)
 //    public void scheduleFixedDelayTask() throws InterruptedException {
@@ -93,29 +78,4 @@ public class UserService implements UserDetailsService {
 //        System.out.println(
 //                "Fixed rate task async - finished " + System.currentTimeMillis() / 1000);
 //    }
-
-    @Scheduled(cron = "0 * * * * *", zone = "Europe/Belgrade")
-    public void increaseUserBalance() {
-        System.out.println("Increasing balance...");
-        this.userRepository.increaseBalance(1);
-//        List<User> users = this.userRepository.findAll();
-//        for (User user : users) {
-//            user.setBalance(user.getBalance() + 1);
-//            this.userRepository.save(user);
-//        }
-    }
-
-    public User hire(String username, Integer salary) {
-        User user = this.userRepository.findByUsername(username);
-        user.setSalary(salary);
-        this.userRepository.save(user);
-
-        CronTrigger cronTrigger = new CronTrigger("0 * * * * *"); // "0 0 0 25 * *"
-        this.taskScheduler.schedule(() -> {
-            System.out.println("Getting salary...");
-            this.userRepository.increaseBalance(salary);
-        }, cronTrigger);
-
-        return user;
-    }
 }
