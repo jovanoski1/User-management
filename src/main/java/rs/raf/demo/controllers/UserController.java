@@ -35,6 +35,7 @@ public class UserController {
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public User me() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return this.userService.findByEmail(email);
     }
 }

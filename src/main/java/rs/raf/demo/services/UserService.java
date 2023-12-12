@@ -9,6 +9,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,7 @@ import rs.raf.demo.model.User;
 import rs.raf.demo.repositories.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -45,7 +47,8 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Email "+email+" not found");
         }
 
-        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(),
+                Arrays.stream(myUser.getAuthorities().split(",")).collect(java.util.stream.Collectors.toList()).stream().map(SimpleGrantedAuthority::new).collect(java.util.stream.Collectors.toList()));
     }
 
     public User create(User user) {

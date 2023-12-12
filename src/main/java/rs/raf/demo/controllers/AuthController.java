@@ -35,7 +35,7 @@ public class AuthController {
             return ResponseEntity.status(401).build();
         }
 
-        return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.getEmail())));
+        return ResponseEntity.ok(new LoginResponse(jwtUtil.generateToken(loginRequest.getEmail(), userService.findByEmail(loginRequest.getEmail()).getAuthorities())));
     }
 
 }

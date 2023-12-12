@@ -31,8 +31,11 @@ public class BootstrapData implements CommandLineRunner {
 //        System.out.println("Loading Data...");
 //
 //        User user1 = new User();
-//        user1.setEmail("user1");
-//        user1.setPassword(this.passwordEncoder.encode("user1"));
+//        user1.setEmail("mihailjovanoski14@gmail.com");
+//        user1.setPassword(this.passwordEncoder.encode("miha"));
+//        user1.setFirstName("Mihail");
+//        user1.setLastName("Jovanoski");
+//        user1.setAuthorities("can_create_users,can_read_users,can_update_users,can_delete_users");
 //        this.userRepository.save(user1);
 //
 //        User user2 = new User();

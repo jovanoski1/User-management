@@ -5,9 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,7 +20,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column
+    @Column(unique = true)
     @NotBlank(message = "Email is mandatory")
     private String email;
 
@@ -26,5 +29,15 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column
+    @NotBlank(message = "First name is mandatory")
+    private String firstName;
+
+    @Column
+    @NotBlank(message = "Last name is mandatory")
+    private String lastName;
+
+    @Column
+    private String authorities;
 
 }
