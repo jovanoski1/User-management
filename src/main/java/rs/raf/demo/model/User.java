@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -37,7 +39,7 @@ public class User {
     @NotBlank(message = "Last name is mandatory")
     private String lastName;
 
-    @Column
+    @Column()
     private String authorities;
 
 }

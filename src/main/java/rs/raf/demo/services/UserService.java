@@ -9,7 +9,7 @@ import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,11 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import rs.raf.demo.model.Role;
 import rs.raf.demo.model.User;
 import rs.raf.demo.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -47,8 +49,15 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Email "+email+" not found");
         }
 
+        Collection<Role> authorities = new ArrayList<>();
+        if (myUser.getAuthorities() != null){
+            for(String s : myUser.getAuthorities().split(",")) {
+                authorities.add(new Role(s));
+            }
+        }
+
         return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(),
-                Arrays.stream(myUser.getAuthorities().split(",")).collect(java.util.stream.Collectors.toList()).stream().map(SimpleGrantedAuthority::new).collect(java.util.stream.Collectors.toList()));
+                authorities);
     }
 
     public User create(User user) {

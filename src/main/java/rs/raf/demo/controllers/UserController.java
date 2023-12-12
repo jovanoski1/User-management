@@ -2,9 +2,12 @@ package rs.raf.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import rs.raf.demo.model.Role;
 import rs.raf.demo.model.User;
 import rs.raf.demo.services.UserService;
 
@@ -23,8 +26,11 @@ public class UserController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public User create(@Valid @RequestBody User user) {
-        return this.userService.create(user);
+    public ResponseEntity<User> create(@Valid @RequestBody User user) {
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new Role("can_create_users"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(userService.create(user)); // this.userService.create(user);
     }
 
     @GetMapping
@@ -35,7 +41,6 @@ public class UserController {
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public User me() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return this.userService.findByEmail(email);
     }
 }
