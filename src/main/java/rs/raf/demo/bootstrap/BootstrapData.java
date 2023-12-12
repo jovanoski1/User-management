@@ -28,23 +28,23 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("Loading Data...");
+//        System.out.println("Loading Data...");
+//
+//        User user1 = new User();
+//        user1.setEmail("user1");
+//        user1.setPassword(this.passwordEncoder.encode("user1"));
+//        this.userRepository.save(user1);
+//
+//        User user2 = new User();
+//        user2.setEmail("user2");
+//        user2.setPassword(this.passwordEncoder.encode("user2"));
+//        this.userRepository.save(user2);
+//
+//        User user3 = new User();
+//        user3.setEmail("user3");
+//        user3.setPassword(this.passwordEncoder.encode("user3"));
+//        this.userRepository.save(user3);
 
-        User user1 = new User();
-        user1.setEmail("user1");
-        user1.setPassword(this.passwordEncoder.encode("user1"));
-        this.userRepository.save(user1);
-
-        User user2 = new User();
-        user2.setEmail("user2");
-        user2.setPassword(this.passwordEncoder.encode("user2"));
-        this.userRepository.save(user2);
-
-        User user3 = new User();
-        user3.setEmail("user3");
-        user3.setPassword(this.passwordEncoder.encode("user3"));
-        this.userRepository.save(user3);
-
-        System.out.println("Data loaded!");
+//        System.out.println("Data loaded!");
     }
 }
