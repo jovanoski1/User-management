@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import rs.raf.demo.model.Role;
 import rs.raf.demo.model.User;
+import rs.raf.demo.requests.UpdateUserRequest;
 import rs.raf.demo.services.UserService;
 
 import javax.validation.Valid;
@@ -40,6 +41,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         return ResponseEntity.ok(userService.getAll());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<User> update(@Valid @RequestBody UpdateUserRequest user) {
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new Role("can_update_users"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(userService.update(user));
     }
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import rs.raf.demo.model.Role;
 import rs.raf.demo.model.User;
 import rs.raf.demo.repositories.UserRepository;
+import rs.raf.demo.requests.UpdateUserRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,21 +74,12 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findUserByEmail(email);
     }
 
-
-//    @Scheduled(fixedDelay = 1000)
-//    public void scheduleFixedDelayTask() throws InterruptedException {
-//        System.out.println(
-//                "Fixed delay task - " + System.currentTimeMillis() / 1000);
-//        Thread.sleep(2000);
-//    }
-
-
-//    @Scheduled(fixedRate = 3000)
-//    public void scheduleFixedRateTaskAsync() throws InterruptedException {
-//        System.out.println(
-//                "Fixed rate task async - " + System.currentTimeMillis() / 1000);
-//        Thread.sleep(5000);
-//        System.out.println(
-//                "Fixed rate task async - finished " + System.currentTimeMillis() / 1000);
-//    }
+    public User update(UpdateUserRequest user) {
+        User userToUpdate = this.userRepository.findUserByEmail(user.getEmail());
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setEmail(user.getEmail());
+        userToUpdate.setAuthorities(user.getAuthorities());
+        return this.userRepository.save(userToUpdate);
+    }
 }
