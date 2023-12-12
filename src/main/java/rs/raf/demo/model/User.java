@@ -18,27 +18,13 @@ public class User {
     private Long userId;
 
     @Column
-    @NotBlank(message = "Username is mandatory")
-    private String username;
+    @NotBlank(message = "Email is mandatory")
+    private String email;
 
     @Column
     @NotBlank(message = "Password is mandatory")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private Integer loginCount = 0;
 
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private Integer balance = 0;
-
-    @Column(nullable = false)
-    @ColumnDefault("0")
-    private Integer salary = 0;
-
-//    @Column
-//    @Version
-//    private Integer version;
 }
