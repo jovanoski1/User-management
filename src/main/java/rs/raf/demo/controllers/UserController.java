@@ -51,6 +51,15 @@ public class UserController {
         return ResponseEntity.ok(userService.update(user));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new Role("can_delete_users"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        userService.delete(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
     public User me() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();

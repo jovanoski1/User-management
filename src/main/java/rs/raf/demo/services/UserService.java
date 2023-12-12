@@ -82,4 +82,8 @@ public class UserService implements UserDetailsService {
         userToUpdate.setAuthorities(user.getAuthorities());
         return this.userRepository.save(userToUpdate);
     }
+
+    public void delete(Long id) {
+        this.userRepository.deleteUserByUserId(id);
+    }
 }
