@@ -65,8 +65,8 @@ public class UserService implements UserDetailsService {
         return this.userRepository.save(user);
     }
 
-    public Page<User> paginate(Integer page, Integer size) {
-        return this.userRepository.findAll(PageRequest.of(page, size, Sort.by("salary").descending()));
+    public List<User> getAll() {
+        return this.userRepository.findAll();
     }
 
     public User findByEmail(String email) {

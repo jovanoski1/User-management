@@ -12,6 +12,7 @@ import rs.raf.demo.model.User;
 import rs.raf.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -34,8 +35,11 @@ public class UserController {
     }
 
     @GetMapping
-    public Page<User> all(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
-        return this.userService.paginate(page, size);
+    public ResponseEntity<List<User>> getAll() {
+        if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new Role("can_read_users"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(userService.getAll());
     }
 
     @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_VALUE)
