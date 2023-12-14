@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAll());
     }
 
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<User> update(@Valid @RequestBody UpdateUserRequest user) {
         if (!SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new Role("can_update_users"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
