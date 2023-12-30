@@ -2,31 +2,47 @@ package rs.raf.demo.bootstrap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import rs.raf.demo.model.*;
 import rs.raf.demo.repositories.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class BootstrapData implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public BootstrapData(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public BootstrapData(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
+
+//        Role r1 = new Role();
+//        r1.setRole("can_read_users");
+//        roleRepository.save(r1);
+//
+//        Role r2 = new Role();
+//        r2.setRole("can_create_users");
+//        roleRepository.save(r2);
+//
+//        Role r3 = new Role();
+//        r3.setRole("can_update_users");
+//        roleRepository.save(r3);
+//
+//        Role r4 = new Role();
+//        r4.setRole("can_delete_users");
+//        roleRepository.save(r4);
 
 //        System.out.println("Loading Data...");
 //
@@ -35,7 +51,14 @@ public class BootstrapData implements CommandLineRunner {
 //        user1.setPassword(this.passwordEncoder.encode("miha"));
 //        user1.setFirstName("Mihail");
 //        user1.setLastName("Jovanoski");
-//        user1.setAuthorities("can_create_users,can_read_users,can_update_users,can_delete_users");
+//
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(r1);
+//        roles.add(r2);
+//        roles.add(r3);
+//        roles.add(r4);
+//        user1.setPermissions(roles);
+//
 //        this.userRepository.save(user1);
 //
 //        User user2 = new User();

@@ -30,9 +30,9 @@ public class JwtUtil {
         return extractAllClaims(token).getExpiration().before(new Date());
     }
 
-    public String generateToken(String username, String authorities){
+    public String generateToken(String username){
         Map<String, Object> claims = new HashMap<>();
-        claims.put("authorities", authorities);
+        //claims.put("authorities", authorities);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(username)

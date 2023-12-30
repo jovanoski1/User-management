@@ -1,30 +1,21 @@
 package rs.raf.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.support.CronTrigger;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import rs.raf.demo.model.Role;
 import rs.raf.demo.model.User;
 import rs.raf.demo.repositories.UserRepository;
+import rs.raf.demo.requests.CreateUserRequest;
 import rs.raf.demo.requests.UpdateUserRequest;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -50,20 +41,23 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Email "+email+" not found");
         }
 
-        Collection<Role> authorities = new ArrayList<>();
-        if (myUser.getAuthorities() != null){
-            for(String s : myUser.getAuthorities().split(",")) {
-                authorities.add(new Role(s));
-            }
-        }
+        Collection<Role> authorities = new ArrayList<>(myUser.getPermissions());
+        System.out.println("loadUserByUsername " + authorities);
 
         return new org.springframework.security.core.userdetails.User(myUser.getEmail(), myUser.getPassword(),
                 authorities);
     }
 
-    public User create(User user) {
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-        return this.userRepository.save(user);
+    public User create(CreateUserRequest user) {
+        User newUser = new User();
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        newUser.setPermissions(new HashSet<>(user.getPermissions()));
+
+        return this.userRepository.save(newUser);
     }
 
     public List<User> getAll() {
@@ -79,7 +73,7 @@ public class UserService implements UserDetailsService {
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setAuthorities(user.getAuthorities());
+        userToUpdate.setPermissions(new HashSet<>(user.getPermissions()));
         return this.userRepository.save(userToUpdate);
     }
 

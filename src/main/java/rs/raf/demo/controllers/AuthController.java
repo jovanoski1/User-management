@@ -38,13 +38,19 @@ public class AuthController {
 
         User u = userService.findByEmail(loginRequest.getEmail());
 
+        boolean canCreateUsers = u.getPermissions().stream().anyMatch(role -> role.getRole().equals("can_create_users"));
+        boolean canReadUsers = u.getPermissions().stream().anyMatch(role -> role.getRole().equals("can_read_users"));
+        boolean canUpdateUsers = u.getPermissions().stream().anyMatch(role -> role.getRole().equals("can_update_users"));
+        boolean canDeleteUsers = u.getPermissions().stream().anyMatch(role -> role.getRole().equals("can_delete_users"));
+
+
         return ResponseEntity.ok(
                 new LoginResponse(
-                        jwtUtil.generateToken(loginRequest.getEmail(), userService.findByEmail(loginRequest.getEmail()).getAuthorities()),
-                        u.getAuthorities().contains("can_create_users"),
-                        u.getAuthorities().contains("can_read_users"),
-                        u.getAuthorities().contains("can_update_users"),
-                        u.getAuthorities().contains("can_delete_users")
+                        jwtUtil.generateToken(loginRequest.getEmail()),
+                        canCreateUsers,
+                        canReadUsers,
+                        canUpdateUsers,
+                        canDeleteUsers
                 )
         );
     }

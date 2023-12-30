@@ -21,6 +21,7 @@ import rs.raf.demo.services.UserService;
 @EnableWebSecurity
 @EnableScheduling
 @EnableAsync
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
